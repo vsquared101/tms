@@ -1,6 +1,5 @@
 ---
 applications:
-- name: tms
+- name: trustee-management-service
   instances: 1
-  host: tms
   path: build/libs/tms-0.0.1-SNAPSHOT.jar
