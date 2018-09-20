@@ -20,7 +20,7 @@ import com.demo.tms.exception.TrusteeNotFoundException;
 import com.demo.tms.model.Trustee;
 import com.demo.tms.repository.TrusteeRepository;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
 public class TrusteeResource {
 	
