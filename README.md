@@ -170,3 +170,43 @@ A Spring Boot application deployed on Pivotal Cloud Foundry which acts as a back
 - The `@CrossOrigin` annotation with the wildcard `*` is added to allow the Angular front-end app to access the endpoints exposed by the REST service.(`Note`: Avoid using the `*` wildcard and provide multiple comma-separated URLs instead, if needed)
 - For exception cases such as when we search for a trustee by providing an invalid ID value `TrusteeNotFoundException` is thrown(This class extends RuntimeException).
 
+## Pushing code to Pivotal Cloud Foundry
+
+- Create a new file named `manifest.yml` in the project root directory.
+
+```yml
+
+    ---
+    applications:
+    - name: trustee-management-service
+      instances: 1
+      path: build/libs/tms-0.0.1-SNAPSHOT.jar
+
+
+```
+
+- The `name` property specifies the name of the application to be pushed to cloud foundry.
+- The no. of instances are provided using the `instances` property.
+- `path` has the path of the self-contained jar that is created by executing the `gradle clean build` command in the root directory.
+- We can also specify properties such as `memory` to limit the memory allocated to the app in PCF.
+- For more details on the manifest file refer to [this](https://docs.cloudfoundry.org/devguide/deploy-apps/manifest.html) page.
+- Install Cloud Foundry CLI on the workstation using this [reference](https://docs.cloudfoundry.org/cf-cli/install-go-cli.html) page.
+- We first need to login to the CLI before pushing our application code to PCF using the below command:
+
+    > cf login -a api.run.pivotal.io
+
+- Provide the Email and Password and select the target 'org' and 'space'(in case we have multiple orgs and spaces mapped to our pivotal web services account)
+- Run the `gradle clean build` command to generate the jar file referred to in the manifest.yml file above:
+
+    > gradle clean build
+
+- Run `cf push` to push the application code to PCF. The CLI will use java-buildpack to build the application code:
+
+    > cf push
+
+- To check the name(s) of the applications deployed in PCF along with their respective routes run the below command:
+
+    > cf apps
+
+- We can append `/trustees` at the end of the route-url to get our REST endpoints.
+- The above endpoints can then be used in the front-end Angular/React application code to perform CRUD operations.
